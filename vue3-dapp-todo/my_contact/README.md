@@ -25,7 +25,11 @@ npx hardhat node
 ## 部署合约
 
 ```shell
+# 本地网络部署
 npx hardhat ignition deploy ./ignition/modules/TodoContract.ts --network localhost
+
+# 测试网部署
+npx hardhat ignition deploy ./ignition/modules/TodoContract.ts --network ganache
 ```
 
 ## 尝试运行以下任务

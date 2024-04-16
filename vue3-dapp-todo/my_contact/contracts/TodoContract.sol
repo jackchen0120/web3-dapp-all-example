@@ -72,7 +72,7 @@ contract TodoContract {
         todoList.push(item);
         emit NewTodo(todoID, msg.sender, _message, block.timestamp);
 
-        uint256 payAmount = 1 ether;
+        uint256 payAmount = 0.1 ether;
         require(msg.value >= payAmount, "\u4f59\u989d\u4e0d\u8db3");
         (bool success, ) = payable(address(this)).call{value: payAmount}("");
         require(success, "\u5411\u5408\u7ea6\u6c47\u6b3e\u5931\u8d25");
