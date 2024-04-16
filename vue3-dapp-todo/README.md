@@ -1,9 +1,39 @@
-# Vue 3 + TypeScript + Vite
+# Vue 3 + TypeScript + Web3 + dApp
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+## 前言
 
-## Recommended Setup
+## 在线教程
 
-- [VS Code](https://code.visualstudio.com/) + [Vue - Official](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (previously Volar) and disable Vetur
+## 项目结构
 
-- Use [vue-tsc](https://github.com/vuejs/language-tools/tree/master/packages/tsc) for performing the same type checking from the command line, or for generating d.ts files for SFCs.
+## 技术栈
+
+## 功能模块
+
+## 下载安装依赖
+
+```shell
+git clone https://github.com/jackchen0120/web3-dapp-all-example.git
+cd vue3-dapp-todo
+yarn or npm install
+```
+
+## 开发模式
+
+```shell
+yarn dev
+```
+
+运行之后，访问地址：http://localhost:5173/
+
+## 生产模式
+
+```shell
+yarn build
+```
+
+## 测试模式
+
+```shell
+yarn test
+```
