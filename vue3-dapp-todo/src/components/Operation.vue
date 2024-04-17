@@ -34,13 +34,13 @@ const getBalance = async () => {
     const provider = new ethers.BrowserProvider(window.ethereum)
     const signer = await provider.getSigner()
     account.value = await signer.getAddress()
-    const todoContract = new ethers.Contract(contractAddr, contractABI.abi, signer)
+    const todoContract = new ethers.Contract(contractAddr, contractABI.abi, provider)
     const count = await todoContract.getBalance()
     balance.value = ethers.formatEther(count)
     console.log('获取余额', balance.value)
-  } catch (error) {
+  } catch (error: any) {
     console.error('获取余额失败：', error)
-    ElMessage.error(JSON.stringify(error))
+    ElMessage.error(error.reason || error.data?.message || error.message)
   }
 }
 
@@ -61,8 +61,9 @@ const getWithdraw = async () => {
     const todoContract = new ethers.Contract(contractAddr, contractABI.abi, signer)
     await todoContract.withdraw()
     ElMessage.success("提款成功")
-  } catch (error) {
+  } catch (error: any) {
     console.error('获取提款失败：', error)
+    ElMessage.error('必须是合约拥有者才能提款')
   }
 }
 
@@ -104,6 +105,7 @@ const publishMsg = async () => {
     }, 2000)
   } catch (error) {
     console.error('发布消息失败：', error)
+    ElMessage.error(JSON.stringify(error))
   }
 }
 
@@ -131,7 +133,7 @@ const getTodoList = async () => {
         todoList.value.push(todo)
       })
     }
-    console.log("获取列表", todoList)
+
     const count = list.length
     localStorage.setItem("todoCount", count)
     todoCount.value = list.length

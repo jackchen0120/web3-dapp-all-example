@@ -42,7 +42,7 @@ export class Todo implements ITodo {
   }
 }
 
-export const contractAddr = "0x3B6F03E52559c8B52c179Cfef4dBD99d549fb2d7";
+export const contractAddr = "0xd03CC03B98aC4b3be9313fDCec81095fA22209fF";
 
 export interface AccountProps {
   account: string;
