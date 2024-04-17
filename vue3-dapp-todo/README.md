@@ -36,6 +36,10 @@ cd vue3-dapp-todo
 yarn or npm install
 ```
 
+## 启动 Hardhat 项目
+
+[hardhat 项目](https://github.com/jackchen0120/web3-dapp-all-example/tree/main/vue3-dapp-todo/my_contact)
+
 ## 开发模式
 
 ```shell
