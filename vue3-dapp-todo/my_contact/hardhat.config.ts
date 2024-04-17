@@ -20,6 +20,7 @@ const config: HardhatUserConfig = {
     ganache: {
       url: "http://127.0.0.1:7545",
       accounts: [
+        "0x99f9235d31fbe54cf54da84d6fddc4cb24186d8994f7d59fc5ea29a507dee439",
         "0x2c323af53bd725630ef16cb135fb81703da72ec8168db17a7d5e56f572696852",
       ],
     },

@@ -40,6 +40,7 @@ const getBalance = async () => {
     console.log('获取余额', balance.value)
   } catch (error) {
     console.error('获取余额失败：', error)
+    ElMessage.error(JSON.stringify(error))
   }
 }
 
@@ -59,6 +60,7 @@ const getWithdraw = async () => {
     const signer = await provider.getSigner()
     const todoContract = new ethers.Contract(contractAddr, contractABI.abi, signer)
     await todoContract.withdraw()
+    ElMessage.success("提款成功")
   } catch (error) {
     console.error('获取提款失败：', error)
   }
@@ -134,7 +136,7 @@ const getTodoList = async () => {
     localStorage.setItem("todoCount", count)
     todoCount.value = list.length
   } catch (e) {
-    console.log('获取消息列表失败：', e)
+    console.error('获取消息列表失败：', e)
   }
 }
 

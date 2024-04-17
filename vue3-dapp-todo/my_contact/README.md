@@ -1,6 +1,6 @@
 # 简单 Hardhat 项目
 
-这个项目展示了一个基本的 Hardhat 用例。它附带了两份样本合约、包含合约的测试以及部署该合约的 Hardhat 点火模块。
+这个项目展示了一个基本的 Hardhat 用例。它附带了两份样本合约、包含合约的测试以及部署该合约的安全帽点火模块。
 
 ## 下载安装依赖
 
@@ -16,18 +16,19 @@ npm install
 npx hardhat compile
 ```
 
-## 启动本地节点
+## 本地部署合约
 
 ```shell
+# 启动本地节点
 npx hardhat node
-```
 
-## 部署合约
-
-```shell
 # 本地网络部署
 npx hardhat ignition deploy ./ignition/modules/TodoContract.ts --network localhost
+```
 
+## 测试网部署合约
+
+```shell
 # 测试网部署
 npx hardhat ignition deploy ./ignition/modules/TodoContract.ts --network ganache
 ```
