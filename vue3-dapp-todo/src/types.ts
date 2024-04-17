@@ -3,7 +3,7 @@
  * @author: Jack Chen @懒人码农
  * @Date: 2024-04-15 22:25:42
  * @LastEditors: Jack Chen
- * @LastEditTime: 2024-04-17 02:07:46
+ * @LastEditTime: 2024-04-18 05:55:31
  */
 declare global {
   interface Window {
@@ -42,7 +42,7 @@ export class Todo implements ITodo {
   }
 }
 
-export const contractAddr = "0xd03CC03B98aC4b3be9313fDCec81095fA22209fF";
+export const contractAddr = "0x52dC2c1807aF8aAb9F07F0fF0a42332817939698";
 
 export interface AccountProps {
   account: string;

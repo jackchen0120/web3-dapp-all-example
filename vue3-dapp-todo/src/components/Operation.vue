@@ -3,7 +3,7 @@
  * @author: Jack Chen @懒人码农
  * @Date: 2024-04-15 22:34:27
  * @LastEditors: Jack Chen
- * @LastEditTime: 2024-04-17 02:48:19
+ * @LastEditTime: 2024-04-18 07:08:04
 -->
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
@@ -63,7 +63,7 @@ const getWithdraw = async () => {
     ElMessage.success("提款成功")
   } catch (error: any) {
     console.error('获取提款失败：', error)
-    ElMessage.error('必须是合约拥有者才能提款')
+    ElMessage.error(error.reason || error.data?.message || error.message)
   }
 }
 
@@ -103,9 +103,9 @@ const publishMsg = async () => {
     setTimeout(() => {
       location.reload()
     }, 2000)
-  } catch (error) {
+  } catch (error: any) {
     console.error('发布消息失败：', error)
-    ElMessage.error(JSON.stringify(error))
+    ElMessage.error(error.reason || error.data?.message || error.message)
   }
 }
 
@@ -137,8 +137,8 @@ const getTodoList = async () => {
     const count = list.length
     localStorage.setItem("todoCount", count)
     todoCount.value = list.length
-  } catch (e) {
-    console.error('获取消息列表失败：', e)
+  } catch (error) {
+    console.error('获取消息列表失败：', error)
   }
 }
 

@@ -3,7 +3,7 @@
  * @author: Jack Chen @懒人码农
  * @Date: 2024-04-11 21:24:03
  * @LastEditors: Jack Chen
- * @LastEditTime: 2024-04-17 02:57:36
+ * @LastEditTime: 2024-04-18 06:16:11
 -->
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
@@ -33,6 +33,7 @@ const connectWallet = async () => {
     // console.log("相关信息", provider, signer, myAccounts)
     const network = await provider.getNetwork()
     chainId.value = network.chainId.toString()
+    // 保存相关信息到本地
     localStorage.setItem("chainId", chainId.value)
     localStorage.setItem("account", account.value)
     ElMessage.success("连接钱包成功")
@@ -45,7 +46,7 @@ const disconnectWallet = async () => {
   if (localStorage.getItem("account")) {
     account.value = ""
     localStorage.removeItem("account")
-    ElMessage.success("断开钱包成功")
+    ElMessage.warning("断开钱包成功")
   }
 }
 
