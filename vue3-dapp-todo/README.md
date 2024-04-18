@@ -48,6 +48,7 @@ npx hardhat ignition deploy ./ignition/modules/TodoContract.ts --network ganache
 ## 开发模式
 
 ```shell
+cd vue3-dapp-todo
 yarn dev
 ```
 
@@ -56,5 +57,6 @@ yarn dev
 ## 生产模式
 
 ```shell
+cd vue3-dapp-todo
 yarn build
 ```
