@@ -1,7 +1,7 @@
 #root {
-  max-width: 1280px;
+  max-width: 1600px;
   margin: 0 auto;
-  /* padding: 2rem; */
+  padding: 0 1.5rem;
   text-align: center;
 }
 
@@ -11,13 +11,42 @@
   align-items: center;
   margin-bottom: 10px;
   border-bottom: 1px solid #eee;
+  padding: 10px 0;
 }
-.header .logo {
+.header .logo a {
   display: flex;
   align-items: center;
+  color: #333;
+}
+.logo h2 {
+  font-size: 20px;
+  margin: 0;
 }
 .header .wallet {
   display: 'flex';
   justify-content: 'flex-end';
   padding: 12
+}
+
+.main {
+  /* display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 20px; */
+  margin: 40px auto;
+}
+
+.main .item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  max-width: 500px;
+  margin: 20px auto;
+}
+
+.main .item span em {
+  color: red;
+  font-size: 20px;
 }

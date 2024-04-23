@@ -1,30 +1,63 @@
-# React + TypeScript + Vite
+# React + TypeScript + Web3 + DApp
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 前言
 
-Currently, two official plugins are available:
+去中心化应用（DApp）是构建在区块链技术上的应用程序，具有去中心化、透明、安全的特性。DApp 开发需要掌握区块链技术、智能合约编写、前端和后端开发等多个领域。
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 在线教程
 
-## Expanding the ESLint configuration
+## 项目结构
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## 技术栈
 
-- Configure the top-level `parserOptions` property like this:
+- react v18
+- typescript
+- rainbowkit
+- wagmi
+- viem
+- hardhat
+- ganache
+- solidity
+- metamask
+- remix ide
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+## 功能模块
+
+- 钱包登录
+- 查询余额
+- 我要提款
+- 发布消息
+- 消息列表
+
+## 下载安装依赖
+
+```shell
+git clone https://github.com/jackchen0120/web3-dapp-all-example.git
+cd react-dapp-todo
+yarn or npm install
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## 启动 Hardhat 项目
+
+```shell
+cd contacts
+npm install
+npx hardhat compile
+npx hardhat ignition deploy ./ignition/modules/TodoContract.ts --network ganache
+```
+
+## 开发模式
+
+```shell
+cd react-dapp-todo
+yarn dev
+```
+
+运行之后，访问地址：http://localhost:5173/
+
+## 生产模式
+
+```shell
+cd react-dapp-todo
+yarn build
+```
