@@ -6,27 +6,27 @@
 
 ## 在线教程
 
-## 项目结构
+[手把手教你从零搭建一款属于自己的 dApp 全栈项目（Vue3+TS）](https://54web3.cc/blog/dapp/dapp-vue3-ethers)
 
 ## 技术栈
 
-* vue3
-* typescript
-* ethers.js
-* hardhat
-* ganache
-* solidity
-* metamask
-* element-plus
-* remix ide
+- vue3
+- typescript
+- ethers.js
+- hardhat
+- ganache
+- solidity
+- metamask
+- element-plus
+- remix ide
 
 ## 功能模块
 
-* 钱包登录
-* 查询余额
-* 我要提款
-* 发布消息
-* 消息列表
+- 钱包登录
+- 查询余额
+- 我要提款
+- 发布消息
+- 消息列表
 
 ## 下载安装依赖
 
@@ -60,3 +60,7 @@ yarn dev
 cd vue3-dapp-todo
 yarn build
 ```
+
+#### 获取更多项目实战经验及各种源码资源，请关注作者公众号：懒人码农
+
+<img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly91c2VyLWdvbGQtY2RuLnhpdHUuaW8vMjAyMC81LzEzLzE3MjBlM2U0ZmQ5NDZiZDQ?x-oss-process=image/format,png" width="430" alt="公众号二维码" />

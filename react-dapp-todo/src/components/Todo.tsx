@@ -13,7 +13,7 @@ import { CheckCircleOutlined, SyncOutlined } from '@ant-design/icons'
 import { Button, Input, Table, message, Tag, Tooltip } from 'antd'
 import type { TableProps } from 'antd'
 import { formatTxHash, timestampToDate } from '../utils'
-import { readContract } from '@wagmi/core'
+import { readContract, writeContract, waitForTransactionReceipt } from '@wagmi/core'
 import { config } from '../config'
 
 interface DataType {
@@ -52,17 +52,18 @@ const columns: TableProps<DataType>['columns'] = [
 function Todo() {
   const [msg, setMsg] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [isWithdraw, setWithdraw] = useState<boolean>(false)
   const [todoList, setTodoList] = useState<DataType[]>([])
   const [balance, setBalance] = useState<string>('')
-  const { address } = useAccount()
+  const { address, isConnected, chainId } = useAccount()
   const { data: balanceData } = useBalance({ address })
   const { data: blockNumber } = useBlockNumber({ watch: true })
   const [messageApi, contextHolder] = message.useMessage()
 
   const contractAddress = import.meta.env.VITE_CONTRACT_ADDRESS // 合约地址
 
-  const { data: hash, error, isPending, writeContract } = useWriteContract() 
+  const { data: hash, error, isPending, writeContractAsync } = useWriteContract() 
   const { isLoading: isConfirming, isSuccess: isConfirmed } = 
     useWaitForTransactionReceipt({ 
       hash, 
@@ -81,16 +82,18 @@ function Todo() {
       setBalance(amount)
     } catch (error) {
       console.error('error', error)
-      messageApi.open({
-        type: 'error',
-        content: '读取合约账户余额失败',
-      })
+      // messageApi.open({
+      //   type: 'error',
+      //   duration: 4,
+      //   content: `读取合约账户余额失败：${(error as BaseError)?.details}`,
+      // })
     }
-  }, [contractAddress, messageApi])
+  }, [contractAddress])
 
   // 读取消息列表
   const getTodoList = useCallback(async () => {
     setLoading(true)
+    setTodoList([])
     try {
       const result = await readContract(config, {
         address: contractAddress,
@@ -108,63 +111,78 @@ function Todo() {
             message: item.message,
             timestamp: item.timestamp.toString(),
           }
-        })
+        }).sort((a, b) => Number(b.timestamp) - Number(a.timestamp))
+        
         setTodoList(dataSource)
       }
+      setLoading(false)
     } catch (error) {
+      setLoading(false)
       console.error('error', error)
       messageApi.open({
         type: 'error',
-        content: '读取消息列表失败',
+        duration: 4,
+        content: `读取消息列表失败：${(error as BaseError)?.details || (error as BaseError)?.shortMessage}`,
       })
     }
-    setLoading(false)
   }, [contractAddress, messageApi])
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      getBalance()
-      getTodoList()
-    }, 5000)
-    getBalance()
-    getTodoList()
-    return () => {
-      clearInterval(timer)
-    }
-  }, [getBalance, getTodoList])
 
   // 我要提款
   const getWithdraw = async () => {
-    console.log('getWithdraw')
+    setWithdraw(true)
     try {
-      readContract(config, {
-        account: address,
-        address: contractAddress,
+      const result = await writeContract(config, {
         abi: contractABI.abi,
+        address: contractAddress,
         functionName: 'withdraw',
-      }).then(result => {
-        console.log('我要提款', result)
       })
+      console.log("发起提款", result)
+      const txReceipt = await waitForTransactionReceipt(config, { hash: result })
+      console.log("等待提款", txReceipt)
+      if (txReceipt.status === 'success') {
+        messageApi.open({
+          type: 'success',
+          duration: 4,
+          content: '提款成功',
+        })
+      }
+      setWithdraw(false)
     } catch (error) {
+      setWithdraw(false)
       console.error('error', error)
       messageApi.open({
         type: 'error',
-        content: '读取提款失败',
+        duration: 4,
+        content: `提款失败：${(error as BaseError)?.details}`,
       })
     }
   }
 
   // 发布消息
-  const publishMsg = () => {
+  const publishMsg = async () => {
     setIsLoading(true)
-    writeContract({
-      abi: contractABI.abi,
-      address: contractAddress,
-      functionName: 'published',
-      args: [msg.trim()],
-      value: parseEther('0.1'),
-    })
-    setMsg('')
+    try {
+      const result = await writeContractAsync({
+        abi: contractABI.abi,
+        address: contractAddress,
+        functionName: 'published',
+        args: [msg.trim()],
+        value: parseEther('0.1'),
+      })
+      setMsg('')
+      console.log("发布消息", result)
+      messageApi.open({
+        type: 'success',
+        content: '发布消息成功',
+      })
+    } catch (error) {
+      console.error('error', error)
+      messageApi.open({
+        type: 'error',
+        duration: 4,
+        content: `发布消息失败：${(error as BaseError)?.details}`,
+      })
+    }
   }
 
   // 监听消息发布
@@ -172,7 +190,26 @@ function Todo() {
     setMsg(e.target.value)
   }
 
-  const showTotal: (total: number, range: [number, number]) => ReactNode = (total, range) => {
+  console.log("address", address, chainId)
+
+  useEffect(() => {
+    let timer = undefined
+    if (isConnected && chainId === 1337) {
+      timer = setInterval(() => {
+        getBalance()
+        getTodoList()
+      }, 6000)
+      getBalance()
+      getTodoList()
+    } else {
+      clearInterval(timer)
+    }
+    return () => {
+      clearInterval(timer)
+    }
+  }, [getBalance, getTodoList, isConnected, chainId])
+
+  const showTotal: (total: number, range: [number, number]) => ReactNode = (total) => {
     return (
       <div>
         共 { total } 条数据
@@ -184,46 +221,46 @@ function Todo() {
     <div className='main'>
       {contextHolder}
       <div className="item">
-        <span>合约账户余额：<em>{ balance || '0.0' }</em> { balanceData?.symbol }</span>
+        <span>合约账户余额：<em>{ isConnected ? Number(balance) || '0.0' : '0.0' }</em> { balanceData?.symbol }</span>
         {/* <Button type="primary" ghost onClick={getBalance}>查询余额</Button> */}
-        <Button type="primary" onClick={getWithdraw}>我要提款</Button>
+        <Button type="primary" onClick={getWithdraw} loading={isWithdraw} disabled={!isConnected}>我要提款</Button>
       </div>
-      <div className='item'><span>当前区块高度：{blockNumber?.toString() || '-'}</span></div>
+      <div className='item'><span>当前区块高度：{ isConnected ? blockNumber?.toString() || '-' : '-'}</span></div>
       <div className="item">
         <Input value={msg} count={{
           show: true,
           max: 50,
         }} maxLength={50} placeholder="请输入消息内容" onInput={handleChange}></Input>
-        <Button type='primary' loading={isLoading && isPending} onClick={publishMsg} disabled={isPending || !msg }>{isPending ? '确认中...' : '发布消息'}</Button>
+        <Button type='primary' loading={isLoading && isPending} onClick={publishMsg} disabled={!isConnected || !msg}>{isPending ? '确认中...' : '发布消息'}</Button>
       </div>
-      {hash && (
+      {isConnected && chainId === 1337 && hash && (
         <div className='item'>
           <Tooltip title={hash}>
             <span>交易哈希: {formatTxHash(hash)}</span>
           </Tooltip>
         </div>
       )}
-      {isConfirming && (
+      {isConnected && chainId === 1337 && isConfirming && (
         <div className='item'>
           <Tag icon={<SyncOutlined spin />} color="processing">
             交易确认中...
           </Tag>
         </div>
       )} 
-      {isConfirmed && (
+      {isConnected && chainId === 1337 && isConfirmed && (
         <div className='item'>
           <Tag icon={<CheckCircleOutlined />} color="success">
             交易已确认
           </Tag>
         </div>
       )} 
-      {error && ( 
+      {/* {error && ( 
         <div className='item'>
           <span className='error'>错误回调: {(error as BaseError).shortMessage || error.message}</span>
         </div> 
-      )} 
+      )}  */}
       <div className="total">
-        <Table loading={loading} columns={columns} dataSource={todoList} pagination={{ pageSize: 6, showTotal }} />
+        <Table loading={loading} columns={columns} dataSource={isConnected && chainId === 1337 ? todoList : []} pagination={{ pageSize: 6, showTotal }} />
       </div>
     </div>
   )
