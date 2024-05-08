@@ -20,8 +20,8 @@ export const timestampToDate = (timestamp: number) => {
   const date = new Date(timestamp * 1000);
   const y = date.getFullYear();
   const m = date.getMonth() + 1; // 月份从0开始，需要加1
-  const d = date.getDate() > 10 ? date.getDate() : `0${date.getDate()}`;
-  const h = date.getHours() > 10 ? date.getHours() : `0${date.getHours()}`;
+  const d = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
+  const h = date.getHours() < 10 ? `0${date.getHours()}` : date.getHours();
   const min =
     date.getMinutes() > 10 ? date.getMinutes() : `0${date.getMinutes()}`;
   const s =
