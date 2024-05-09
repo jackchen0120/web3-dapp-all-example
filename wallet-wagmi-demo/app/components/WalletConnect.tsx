@@ -1,9 +1,9 @@
 /*
- * @description: 连接钱包页面
+ * @description: WalletConnect组件
  * @author: Jack Chen @懒人码农
  * @Date: 2024-05-09 00:09:35
  * @LastEditors: Jack Chen
- * @LastEditTime: 2024-05-09 01:36:01
+ * @LastEditTime: 2024-05-09 22:46:54
  */
 "use client";
 
@@ -27,8 +27,8 @@ const Account = () => {
   return (
     <>
       {ensAvatar && <Image alt="ENS Avatar" src={ensAvatar} />}
-      {address && <div>{ensName ? `${ensName} (${address})` : address}</div>}
-      <Button onClick={() => disconnect()}> 断开连接</Button>
+      {address && <div className="my-5">{ensName ? `${ensName} (${address})` : address}</div>}
+      <Button type="primary" onClick={() => disconnect()}> 断开连接</Button>
     </>
   );
 };
@@ -103,11 +103,11 @@ export default function WalletCon() {
         <ConnectorButton connector={walletConnectConnector} />
       </div>
       <div className="inline-flex w-80 p-5 my-2 border-2 border-black border-dotted flex-col items-center gap-y-1">
-      <div className="my-2">以下是 EIP-1193 提供的注入链路功能</div>
+        <div className="my-2">以下是 EIP-1193 提供的注入链路功能</div>
         <ConnectorButton connector={injectedConnector} />
       </div>
       <div className="inline-flex w-80 p-5 my-2 border-2 border-black border-double flex-col items-center gap-y-1">
-      <div className="my-2">以下是您的浏览器支持的 Chrome 扩展，可从 EIP-6963 中找到</div>
+        <div className="my-2">以下是您的浏览器支持的 Chrome 扩展，可从 EIP-6963 中找到</div>
         {eip6963Buttons}
       </div>
     </div>
