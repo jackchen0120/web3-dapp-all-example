@@ -3,7 +3,7 @@
  * @author: Jack Chen @懒人码农
  * @Date: 2024-05-15 10:23:39
  * @LastEditors: Jack Chen
- * @LastEditTime: 2024-05-15 11:00:46
+ * @LastEditTime: 2024-05-15 11:03:33
  */
 'use client';
 
@@ -20,7 +20,7 @@ export default function Page() {
   return (
     <div>
       <div className="flex flex-row justify-center items-center">
-      请选择一条链: <Select value={selectedId} onChange={setSelectedId} className="mx-2 w-40" placeholder="请选择链" options={chains.map(t => ({ label: t.name, value: t.id }))}/>
+      请选择一条链: <Select value={selectedId} onChange={setSelectedId} className="mx-2 w-40" placeholder="链" options={chains.map(t => ({ label: t.name, value: t.id }))}/>
     </div>
     { selectedChain && <ChainCard chain={selectedChain} /> }
     </div>
