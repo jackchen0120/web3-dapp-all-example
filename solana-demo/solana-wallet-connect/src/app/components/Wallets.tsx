@@ -54,12 +54,12 @@ export default function Wallets() {
     []
   );
 
-   // Wallet 组件1
+  // Wallet 组件1
   const WalletOne = () => {
-    // 连接对象 
+    // 连接对象
     const { connection } = useConnection();
     // 公钥对象
-    const { publicKey, sendTransaction } = useWallet();
+    const { publicKey } = useWallet();
     // 钱包余额
     const [balance, setBalance] = useState(0);
 
@@ -72,11 +72,15 @@ export default function Wallets() {
 
         try {
           // 监听钱包余额变化
-          connection.onAccountChange(publicKey, (updateAccountInfo) => {
-            setBalance(updateAccountInfo.lamports / LAMPORTS_PER_SOL);
-          }, {
-            commitment: "confirmed",
-          });
+          connection.onAccountChange(
+            publicKey,
+            (updateAccountInfo) => {
+              setBalance(updateAccountInfo.lamports / LAMPORTS_PER_SOL);
+            },
+            {
+              commitment: "confirmed",
+            }
+          );
 
           // 获取钱包余额
           const accountInfo = await connection.getAccountInfo(publicKey);
@@ -86,11 +90,10 @@ export default function Wallets() {
           } else {
             throw new Error("Account info not found");
           }
-
-        } catch(error) {
+        } catch (error) {
           console.error("Failed to retrieve account info:", error);
         }
-      }
+      };
 
       updateBalance();
     }, [connection, publicKey]);
@@ -101,8 +104,8 @@ export default function Wallets() {
         <WalletDisconnectButton />
         <p>{publicKey ? `Balance: ${balance} SOL` : ""}</p>
       </div>
-    )
-  }
+    );
+  };
 
   // Send Sol 组件
   const SendSol = () => {
@@ -136,22 +139,32 @@ export default function Wallets() {
       } catch (error) {
         console.error("Failed to send transaction:", error);
       }
-    }
+    };
 
     if (!publicKey) {
-      return (
-        <p>Please connect your wallet first</p>
-      );
+      return <p>Please connect your wallet first</p>;
     }
 
     return (
       <div className="flex flex-col gap-2">
-        <input className="border border-gray-300 rounded-md p-2 dark:text-black" type="text" placeholder="Recipient Address" onChange={(e) => setRecipientAddress(e.target.value)} />
-        <input className="border border-gray-300 rounded-md p-2 dark:text-black" type="number" placeholder="Amount (SOL)" onChange={(e) => setAmount(Number(e.target.value))} />
-        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold p-2 rounded-md" onClick={sendTx}>Send SOL</button>
+        <input
+          className="border border-gray-300 rounded-md p-2 dark:text-black"
+          type="text"
+          placeholder="Recipient Address"
+          onChange={(e) => setRecipientAddress(e.target.value)}
+        />
+        <input
+          className="border border-gray-300 rounded-md p-2 dark:text-black"
+          type="number"
+          placeholder="Amount (SOL)"
+          onChange={(e) => setAmount(Number(e.target.value))}
+        />
+        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold p-2 rounded-md" onClick={sendTx}>
+          Send SOL
+        </button>
       </div>
     );
-  }
+  };
 
   // Wallet组件2
   // const WalletTwo = () => {
