@@ -3,7 +3,7 @@
  * @author: Jack Chen @懒人码农
  * @Date: 2025-02-09 23:19:29
  * @LastEditors: Jack Chen
- * @LastEditTime: 2025-02-09 23:50:42
+ * @LastEditTime: 2025-02-10 22:36:09
  */
 "use client";
 
@@ -26,9 +26,13 @@ function CreateTokenForm() {
   const [loading, setLoading] = useState(false);
 
   const handleCreateToken = async () => {
-    if (!connection || !publicKey) return;
-    toast.error("请先连接钱包");
+    if (!connection || !publicKey) {
+      toast.error("请先连接钱包");
+      return;
+    };
+
     setLoading(true);
+    
     try {
       // 创建临时密钥对，用于支付创建代币的费用
       const mintKeypair = Keypair.generate();
@@ -47,7 +51,7 @@ function CreateTokenForm() {
       );
       const signature = await sendTransaction(tx, connection, { signers: [mintKeypair] });
       console.log("signature", signature);
-      toast.success(`代币创建成功，Mint地址：${mintKeypair.publicKey.toBase58()}`);
+      toast.success("代币创建成功");
       setMintAddress(mintKeypair.publicKey.toBase58());
     } catch (err) {
       console.error("创建代币失败：", err);

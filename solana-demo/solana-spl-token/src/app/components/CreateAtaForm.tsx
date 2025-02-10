@@ -3,7 +3,7 @@
  * @author: Jack Chen @懒人码农
  * @Date: 2025-02-09 23:19:46
  * @LastEditors: Jack Chen
- * @LastEditTime: 2025-02-10 00:41:59
+ * @LastEditTime: 2025-02-10 22:10:00
  */
 "use client";
 
@@ -12,7 +12,7 @@ import { useWallet, useConnection } from "@solana/wallet-adapter-react";
 import {
   createAssociatedTokenAccountInstruction,
   getAssociatedTokenAddress,
-  getOrCreateAssociatedTokenAccount,
+  // getOrCreateAssociatedTokenAccount,
 } from "@solana/spl-token";
 import { PublicKey, Transaction } from "@solana/web3.js";
 import toast, { Toaster } from "react-hot-toast";
