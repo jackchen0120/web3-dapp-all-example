@@ -10,8 +10,8 @@
 import { useEffect, useState } from "react";
 import { useWallet, useConnection } from "@solana/wallet-adapter-react";
 import { TOKEN_PROGRAM_ID } from "@solana/spl-token";
-import toast, { Toaster } from "react-hot-toast";
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
+import toast, { Toaster } from "react-hot-toast";
 
 interface TokenAccountInfo {
   mint: string;
@@ -26,6 +26,39 @@ function TokenList() {
   const [tokens, setTokens] = useState<TokenAccountInfo[]>([]);
 
   useEffect(() => {
+    const updateBalance = async () => {
+      if (!connection || !publicKey) return;
+
+      try {
+        // 监听钱包余额变化
+        connection.onAccountChange(
+          publicKey,
+          (updateAccountInfo) => {
+            setBalance(updateAccountInfo.lamports / LAMPORTS_PER_SOL);
+          },
+          {
+            commitment: "confirmed",
+          }
+        );
+
+        // 获取钱包余额
+        const accountInfo = await connection.getAccountInfo(publicKey);
+        console.log("accountInfo", accountInfo);
+
+        if (accountInfo) {
+          setBalance(accountInfo.lamports / LAMPORTS_PER_SOL);
+          fetchTokenAccounts();
+        } else {
+          throw new Error("Account info not found");
+        }
+      } catch (error) {
+        console.error("Failed to retrieve account info:", error);
+        toast.error("获取SOL余额失败");
+      }
+    };
+
+    updateBalance();
+
     const fetchTokenAccounts = async () => {
       if (!connection || !publicKey) return;
       try {
@@ -48,42 +81,6 @@ function TokenList() {
         toast.error("获取代币列表失败");
       }
     };
-    fetchTokenAccounts();
-  }, [publicKey, connection]);
-
-  useEffect(() => {
-    const updateBalance = async () => {
-      if (!connection || !publicKey) {
-        return;
-      }
-
-      try {
-        // 监听钱包余额变化
-        connection.onAccountChange(
-          publicKey,
-          (updateAccountInfo) => {
-            setBalance(updateAccountInfo.lamports / LAMPORTS_PER_SOL);
-          },
-          {
-            commitment: "confirmed",
-          }
-        );
-
-        // 获取钱包余额
-        const accountInfo = await connection.getAccountInfo(publicKey);
-
-        if (accountInfo) {
-          setBalance(accountInfo.lamports / LAMPORTS_PER_SOL);
-        } else {
-          throw new Error("Account info not found");
-        }
-      } catch (error) {
-        console.error("Failed to retrieve account info:", error);
-        toast.error("获取SOL余额失败");
-      }
-    };
-
-    updateBalance();
   }, [connection, publicKey]);
 
   return (
