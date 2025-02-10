@@ -24,7 +24,7 @@ export default function Home() {
       <ConnectWalletButton />
       {connected && publicKey && (
         <>
-          <p className="mb-1 mt-4 text-gray-600 dark:text-gray-400 md:text-base text-xs">
+          <p className="mb-1 mt-4 text-gray-400 md:text-base text-xs">
             当前钱包地址：<span className="text-green-300">{publicKey.toBase58()}</span>
           </p>
           <Tabs tabs={tabItems} />

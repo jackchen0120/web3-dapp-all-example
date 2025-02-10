@@ -3,7 +3,7 @@
  * @author: Jack Chen @懒人码农
  * @Date: 2025-02-09 23:19:07
  * @LastEditors: Jack Chen
- * @LastEditTime: 2025-02-09 23:48:50
+ * @LastEditTime: 2025-02-10 22:51:31
  */
 "use client";
 
@@ -17,6 +17,7 @@ interface TokenAccountInfo {
   mint: string;
   amount: string;
   decimals: number;
+  ataAddress: string;
 }
 
 function TokenList() {
@@ -41,18 +42,13 @@ function TokenList() {
           }
         );
 
-        // 获取钱包余额
-        const accountInfo = await connection.getAccountInfo(publicKey);
-        console.log("accountInfo", accountInfo);
+        // 获取SOL钱包余额
+        const myBalance = await connection.getBalance(publicKey);
+        // console.log("myBalance", myBalance);
 
-        if (accountInfo) {
-          setBalance(accountInfo.lamports / LAMPORTS_PER_SOL);
-          fetchTokenAccounts();
-        } else {
-          throw new Error("Account info not found");
-        }
+        setBalance(myBalance / LAMPORTS_PER_SOL);
       } catch (error) {
-        console.error("Failed to retrieve account info:", error);
+        console.error("获取SOL余额失败：", error);
         toast.error("获取SOL余额失败");
       }
     };
@@ -72,35 +68,44 @@ function TokenList() {
             mint: info.mint,
             amount: info.tokenAmount.uiAmountString,
             decimals: info.tokenAmount.decimals,
+            ataAddress: item.pubkey.toBase58(),
           };
         });
         setTokens(tokenList);
-        toast.success("代币列表已更新");
+        // console.log("tokenList", tokenList);
+        tokenList.length && toast.success("代币列表已更新");
       } catch (err) {
         console.error("获取代币账户失败：", err);
         toast.error("获取代币列表失败");
       }
     };
+    fetchTokenAccounts();
   }, [connection, publicKey]);
 
   return (
     <div>
-      <h2 className="font-semibold mb-2 md:text-xl text-base">SPL 代币列表</h2>
+      {/* <h2 className="font-semibold mb-2 md:text-xl text-base">SPL 代币列表</h2> */}
       {tokens.length === 0 ? (
-        <p className="md:text-base text-xs">暂无代币账户数据</p>
+        <>
+          <div className="bg-gray-800 text-gray-400 p-3 my-2 mb-4 rounded md:text-base text-xs">
+            <p>当前钱包余额: <span className="text-green-300">{balance} SOL</span></p>
+          </div>
+          <p className="md:text-base text-xs">暂无代币账户数据</p>
+        </>
       ) : (
         <div>
-          <div className="bg-gray-800 p-3 my-2 mb-4 rounded md:text-base text-xs">
-            <p>SOL 余额: {balance}</p>
+          <div className="bg-gray-800 text-gray-400 p-3 my-2 mb-4 rounded md:text-base text-xs">
+            <p>当前钱包余额: <span className="text-green-300">{balance} SOL</span></p>
           </div>
           <ul>
             {tokens.map((token, index) => (
-              <li key={index} className="bg-gray-800 p-3 my-1 rounded mb-4 md:text-base text-xs">
+              <li key={index} className="bg-gray-800 text-gray-400 p-3 my-1 rounded mb-4 md:text-base text-xs">
                 <p>
-                  Mint: <span className="text-green-300">{token.mint}</span>
+                  铸币地址: <span className="text-green-300">{token.mint}</span>
                 </p>
-                <p>Decimals: {token.decimals}</p>
-                <p>余额: {token.amount}</p>
+                <p>小数位数: <span className="text-white">{token.decimals}</span></p>
+                <p>铸币数量: <span className="text-white">{token.amount}</span></p>
+                <p>关联账户地址: <span className="text-white">{token.ataAddress}</span></p>
               </li>
             ))}
           </ul>

@@ -3,7 +3,7 @@
  * @author: Jack Chen @懒人码农
  * @Date: 2025-02-09 23:20:00
  * @LastEditors: Jack Chen
- * @LastEditTime: 2025-02-10 00:37:17
+ * @LastEditTime: 2025-02-10 22:35:35
  */
 "use client";
 
@@ -34,10 +34,11 @@ function MintTokenForm() {
       // 获取接收者的关联账户地址
       const associatedToken = await getAssociatedTokenAddress(mintPubkey, recipientPubkey);
       const tx = new Transaction().add(
+        // 创建铸币指令
         createMintToInstruction(mintPubkey, associatedToken, publicKey, BigInt(Number(amount)))
       );
       const signature = await sendTransaction(tx, connection);
-      console.log(`铸造成功，交易签名：${signature}`);
+      console.log(`铸币成功，交易签名：${signature}`);
       // 获取最新区块
       const block = await connection.getLatestBlockhash();
       // 等待交易确认
@@ -49,8 +50,6 @@ function MintTokenForm() {
 
       toast.success("代币铸造成功");
       setAmount("");
-      setMintAddress("");
-      setRecipientAddress("");
     } catch (err) {
       console.error("铸造代币失败：", err);
       toast.error("铸造代币失败");
