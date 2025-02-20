@@ -3,7 +3,7 @@
  * @author: Jack Chen @懒人码农
  * @Date: 2025-02-09 23:08:43
  * @LastEditors: Jack Chen
- * @LastEditTime: 2025-02-20 15:53:36
+ * @LastEditTime: 2025-02-20 15:20:07
  */
 "use client";
 
@@ -23,10 +23,10 @@ export function Providers({ children }: { children: ReactNode }) {
   const network = WalletAdapterNetwork.Devnet;
   const endpoint = useMemo(() => clusterApiUrl(network), [network]);
   const wallets = useMemo(() => [new PhantomWalletAdapter(), new SolflareWalletAdapter({ network })], [network]);
-  // 注册免费的RPC节点：https://www.helius.dev/solana-rpc-nodes
+  // https://api.devnet.solana.com
   return (
     <ConnectionProvider endpoint={"https://api.devnet.solana.com"}>
-      <WalletProvider wallets={wallets} autoConnect>
+      <WalletProvider wallets={[]} autoConnect>
         <WalletModalProvider>{children}</WalletModalProvider>
       </WalletProvider>
     </ConnectionProvider>
